@@ -1,0 +1,67 @@
+@import url('https://fonts.cdnfonts.com/css/berkshire-swash');
+
+$pink: #ffe8e5;
+$blue: #393F82;
+$red: #FF4133;
+
+@mixin  flex ($flex-direction: row) {
+    display: flex;
+    flex-direction: $flex-direction;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+html, body{
+    height: 100vh;
+    height: 100vw;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Berkshire Swash', sans-serif;
+
+}
+
+.btn-primary{
+    background-color: $blue;
+    border: 1px $blue solid;
+}
+
+.content{
+    width: 100%;
+    background-color: $pink;
+    height: 100%;
+    padding-top: 30px;
+    padding-bottom: 40px;
+}
+
+.main{
+    width: 80%;
+    height: 75vh;
+    margin:  auto;
+    background-color: rgb(118, 118, 177);
+    @include flex();
+
+    &__image{
+        width: 30%;
+        img{
+            height: 300px;
+            width: auto;
+            margin: 80px 20px 15px 130px;
+        }
+    }
+
+    &__text{
+        width: 70%;
+        span{
+            color: $blue;
+        }
+
+        .buttons{
+            @include flex(column);
+
+            .btn{
+                margin: 10px auto;
+            }
+        }
+    }
+}
