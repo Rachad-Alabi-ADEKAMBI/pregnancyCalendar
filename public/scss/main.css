@@ -16,7 +16,6 @@ html, body {
 .content {
   width: 100%;
   background-color: #ffe8e5;
-  height: 100%;
   padding-top: 30px;
   padding-bottom: 40px;
 }
@@ -47,7 +46,7 @@ html, body {
 }
 .main__text .buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   flex-wrap: wrap;
 }

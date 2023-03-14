@@ -29,7 +29,6 @@ html, body{
 .content{
     width: 100%;
     background-color: $pink;
-    height: 100%;
     padding-top: 30px;
     padding-bottom: 40px;
 }
@@ -50,14 +49,14 @@ html, body{
         }
     }
 
-    &__text{
+    &__text{    
         width: 70%;
         span{
             color: $blue;
         }
 
         .buttons{
-            @include flex(column);
+            @include flex();
 
             .btn{
                 margin: 10px auto;

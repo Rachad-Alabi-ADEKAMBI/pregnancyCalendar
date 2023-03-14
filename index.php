@@ -45,71 +45,48 @@
 
                     <div class="results" v-if='showResults'>
                         <p class="text text-justify">
-                            Vous etes span de 6 mois 2 sem et 3 jours, <br>
-                            bravo, vous avez fait 60 % du chemin <br>
-                            Date prévue d'accouchement prévue: 15/09/2023 <br>
+                            Vous etes span de <span> 6 mois 2 sem et 3 jours</span>, <br>
+                            bravo, vous avez fait <span>60 % du chemin</span> <br>
+                            Date prévue d'accouchement prévue: <span>15/09/2023</span> <br>
                             Date de conception: <span>11/01/2023</span> <br>
                             Date limite pour déclarer votre grossesse: <span>15/03/2023</span> <br>
                             Date limite pour effectuer le test de trisomie 21: <span>entre le 01/03/2023 et le
                                 15/04/2023</span>
                         </p>
-
-                        <div class="buttons">
-                            <button class="btn btn-primary" @clcik='displayEchography'>
-                                Echographie
-                            </button>
-
-                            <button class="btn btn-primary" @clcik='displayEchography'>
-                                Consultations
-                            </button>
-                        </div>
                     </div>
-                </div>
 
-            </div>
+                    <div class="results" v-if='showEchography'>
+                        <p class="text text-justify">
+                            Echographie
+                        </p>
+                    </div>
 
-            <div class="main" v-if='showMenu'>
-                <div class="main__image">
-                    <img src="public/img/Humaaans_Character.png" alt="">
-                </div>
 
-                <div class="main__text">
                     <div class="buttons">
-                        <button class="btn btn-primary" @click='displayPregnancy()'>
-                            Calendrier grossesse
+                        <button class="btn btn-primary" @click='displayEchography()'>
+                            Echographie
                         </button>
 
-                        <button class="btn btn-primary">
-                            Calcul terme grossesse
+                        <button class="btn btn-primary" @click='display()'>
+                            Consultations
                         </button>
 
-                        <button class="btn btn-primary">
-                            Calcul ovulation
+
+                        <button class="btn btn-primary" @click='displayVacancies()'>
+                            Congés maternité
                         </button>
 
-                        <button class="btn btn-primary">
-                            Grossesse semaine par semaine
-                        </button>
-
-                        <button class="btn btn-primary">
-                            Calendrier grossesse
-                        </button>
-
-                        <button class="btn btn-primary">
-                            Date d'accouchement
+                        <button class="btn btn-primary" @click='displayMore()'>
+                            Plus
                         </button>
                     </div>
                 </div>
 
             </div>
 
-            <div class="main" v-if='showPregnancy'>
-                form
-            </div>
         </div>
-
-        <?php include 'parts/footer.php'; ?>
     </div>
+    <?php include 'parts/footer.php'; ?>
 </body>
 
 </html>

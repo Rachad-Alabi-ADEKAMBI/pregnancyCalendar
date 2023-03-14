@@ -4,9 +4,11 @@ const { createApp } = Vue
 createApp({
   data() {
     return {
-        showHome: true,
+        showHome: false,
         showMenu: false,
-        showResults: true
+        date: '',
+        showResults: false,
+        showEchography: false,
     }
 },
 mounted: function() {
@@ -26,15 +28,21 @@ computed: {
 methods: {
     displayHome() {
        this.showHome = true;
-       this.showMenu =  false
+       this.showButtons = false;
+       this.showResults = false;
+       alert('ok');
+       console.log('ok0');
     },
-    displayMenu() {
-        this.showHome = false;
-        this.showMenu =  true;
-        alert('ok');
+     displayEchography(){
+        this.showResults = false;
+        this.showButtons = true;
+        this.showEchography = true
      },
      proceed(){
         this.showResults= true;
+        this.showButtons = true;
+        this.showEchography = false;
+
      },
 
     format(num){
