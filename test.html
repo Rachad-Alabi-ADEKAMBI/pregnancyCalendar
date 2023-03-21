@@ -8,34 +8,21 @@
 <body>
   <div id="app">
     <div>
-      <label>Date des dernières règles:</label>
-      <input type="date" v-model="lastPeriodDate">
-    </div>
-    <div>
-      <label>Date de conception:</label>
-      <input type="date" v-model="conceptionDate">
-    </div>
-
-    <button @click="proceed">
-        Calculer
-    </button>
-    <div>
-      <p>Durée de la grossesse:</p>
-      <p>{{ durationInDays }} jours</p>
-      <p>{{ durationInWeeks }} semaines</p>
-      <p>{{ durationInMonths }} mois</p>
-    </div>
-    <div>
-      <p>Pourcentage de la grossesse écoulée:</p>
-      <p>{{ format((durationInDays *100)/316 ) }}%</p>
-    </div>
-
-    <p>
-      vous êtes dans le {{ durationInMonthsFormated }}{{ durationInMonthsFormated === 1 ? 'er' : 'ème' }} mois
-    </p>
-    <div>
-      <p>Date probable de l'accouchement:</p>
-      <p>{{ dueDate }}</p>
+      <h1>Calcul du nombre de jours d'aménorrhée</h1>
+      <form>
+        <div>
+          <label for="last-period-date">Date des dernières règles:</label>
+          <input type="date" id="last-period-date" v-model="lastPeriodDate">
+        </div>
+        <div>
+          <label for="conception-date">Date de conception:</label>
+          <input type="date" id="conception-date" v-model="conceptionDate">
+        </div>
+        <button type="button" @click="calculate">Calculer</button>
+      </form>
+      <div v-if="showResults">
+        <p>Nombre de jours d'aménorrhée: {{ AndurationInDays }}</p>
+      </div>
     </div>
   </div>
 
@@ -45,37 +32,19 @@
       data: {
         lastPeriodDate: '',
         conceptionDate: '',
-        durationInDays: '',
-        durationInWeeks: '',
-        durationInMonths: '',
-        durationInMonthsFormated: '',
-        dueDate: ''
+        showResults: false,
+        AndurationInDays: null,
       },
-      computed: {
-        getDueDate() {
-         return new Date(this.lastPeriodDate ? new Date(this.lastPeriodDate).getTime() + 288 * 24 * 60 * 60 * 1000 : new Date(this.conceptionDate).getTime() + 266 * 24 * 60 * 60 * 1000);
-        },
-        dueDateFormat() {
-          return this.dueDate.toLocaleDateString();
-        }
-      },
+
       methods: {
-        proceed() {
+        calculate() {
           const today = new Date();
           const startDate = this.lastPeriodDate ? new Date(this.lastPeriodDate) : new Date(this.conceptionDate);
           const durationInMs = today - startDate;
-          this.durationInDays = Math.floor(durationInMs / 1000 / 60 / 60 / 24);
-          this.durationInWeeks = Math.floor(this.durationInDays / 7);
-          this.durationInMonths = Math.floor(this.durationInDays / 30);
-          this.durationInMonthsFormated = this.durationInMonths + 1;
-
-          this.dueDate = this.getDueDate;
-        },
-        format(num){
-          let res = new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 2 }).format(num);
-             return res;
+          this.AndurationInDays = Math.floor(durationInMs / 1000 / 60 / 60 / 24);
+          this.showResults = true;
         }
-      }
+      },
     });
   </script>
 </body>

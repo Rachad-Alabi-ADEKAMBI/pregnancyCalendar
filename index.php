@@ -45,11 +45,12 @@
                             Calcul terme grossesses
                         </h2>
                         <p class='text text-justify'>
-                            Vous etes enceinte de: <span> {{  convertir(durationInDays)  }} </span> <br>
+                            Vous êtes enceinte de: <span> {{  convertir(durationInDays)  }} </span> <br>
                             bravo, vous avez fait: <span> {{ format((durationInDays *100)/316 ) }} % du chemin</span>
                             <br>
                             Date estimable d'accouchement : <span>{{dueDate}}</span> <br>
-                            Date limite pour déclarer votre grossesse: <span>15/03/2023</span> <br>
+                            Durée d'aménorrhées: <span>{{ Anduration }} </span> <br>
+                            Date limite pour déclarer votre grossesse: <span>{{ dateOfAnnounement}}</span> <br>
                             Date limite pour effectuer le test de trisomie 21: <span>entre le 01/03/2023 et le
                                 15/04/2023</span>
                         </p>
@@ -177,10 +178,10 @@
                     vous êtes dans le <span>
                         {{ durationInMonthsFormated }}{{ durationInMonthsFormated === 1 ? 'er' : 'ème' }} mois </span>
                     <br>
-                    bravo, vous avez fait: <span> {{ format((durationInDays *100)/316 ) }} % du chemin</span> <br>
-                    Date limite pour déclarer votre grossesse: <span>15/03/2023</span> <br>
-                    Date limite pour effectuer le test de trisomie 21: <span>entre le 01/03/2023 et le
-                        15/04/2023</span>
+                    bravo, vous avez fait: <span> {{ ((durationInDays *100)/270 ) }} % du chemin</span> <br>
+                    Date limite pour déclarer votre grossesse: <span>{{ datOfAnnouncement}}</span> <br>
+                    Date limite pour effectuer le test de trisomie 21: entre le<span> {{dateTriso1}}</span> et le
+                    <span>/04/2023</span>
                 </p>
 
                 <p class='text'>

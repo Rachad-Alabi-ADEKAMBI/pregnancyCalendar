@@ -17,7 +17,14 @@ createApp({
       durationInWeeks: '',
       durationInMonths: '',
       durationInMonthsFormated: '',
-      dueDate: ''
+      dueDate: '',
+      AndurationInDays: '',
+      AndurationInDays: '',
+      Anduration: '',
+      dateOfAnnounement: '',
+      dateTriso1: '',
+      dateTriso2: ''
+
     }
   },
   computed: {
@@ -39,22 +46,50 @@ createApp({
         alert('Veuillez renseigner soit la date des dernières règles soit celle de la conception');
       } else {
         const today = new Date();
-        const startDate = this.lastPeriodDate ? new Date(this.lastPeriodDate) : new Date(this.conceptionDate);
+        const startDate = this.lastPeriodDate  ? new Date(this.lastPeriodDate) : new Date(this.conceptionDate);
         const durationInMs = today - startDate;
-        this.durationInDays = Math.floor(durationInMs / 1000 / 60 / 60 / 24);
-        this.durationInWeeks = Math.floor(this.durationInDays / 7);
-        this.durationInMonths = Math.floor(this.durationInDays / 30);
-        this.durationInMonthsFormated = this.durationInMonths + 1;
+        this.durationInDays = Math.floor((durationInMs / 1000 / 60 / 60 / 24));
 
-        this.dueDate = this.getDueDate;
+        if(this.durationInDays > 300){
+          alert("Merci de vérifier la date insérée")
+        } else{
+          this.durationInWeeks = Math.floor(this.durationInDays / 7);
+          this.durationInMonths = Math.floor(this.durationInDays / 30);
+          this.durationInMonthsFormated = this.durationInMonths + 1;
 
-        this.showResults = true;
-        this.showButtons = true;
-        this.showEchography = false;
-        this.showAppointments = false;
-        this.showMore = false;
-        this.showVacancies = false;
-        this.showCalendar = false;
+          this.dueDate = this.getDueDate;
+
+          this.AndurationInDays = Math.floor(durationInMs / 1000 / 60 / 60 / 24);
+          this.AndurationInWeeks = Math.floor(this.AndurationInDays / 7);
+          if (this.AndurationInDays % 7 === 0) {
+            this.Anduration = this.AndurationInWeeks + ' semaines';
+          } else if (this.AndurationInWeeks === 0) {
+            this.Anduration = this.AndurationInDays + ' jour' + (this.AndurationInDays > 1 ? 's' : '');
+          } else {
+            this.Anduration = this.AndurationInWeeks + ' semaines ' + (this.AndurationInDays % 7) + ' jour' + ((this.AndurationInDays % 7) > 1 ? 's' : '');
+          }
+
+          this.dateOfAnnounement =  new Date(
+           ( this.lastPeriodDate
+            ? new Date(this.lastPeriodDate).getTime() + 104 * 24 * 60 * 60 * 1000
+            : new Date(this.conceptionDate).getTime() + 89 * 24 * 60 * 60 * 1000)
+          );
+
+          this.dateTriso1 =  new Date(
+            ( this.lastPeriodDate
+             ? new Date(this.lastPeriodDate).getTime() + 116 * 24 * 60 * 60 * 1000
+             : new Date(this.conceptionDate).getTime() + 95 * 24 * 60 * 60 * 1000)
+           );
+
+
+          this.showResults = true;
+          this.showButtons = true;
+          this.showEchography = false;
+          this.showAppointments = false;
+          this.showMore = false;
+          this.showVacancies = false;
+          this.showCalendar = false;
+        }
       }
     },
     convertir(jours) {
