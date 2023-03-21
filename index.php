@@ -22,9 +22,7 @@
                         bienvenue sur le calendrier,
                     </p>
 
-
-
-                    <div class='proceed mb-2'>
+                    <div class='proceed '>
 
                         <div class='form'>
                             <label for=''>Date des dernières règles:
@@ -32,7 +30,7 @@
                             </label>
 
                             <label for=''></label>Date de conception:
-                            <input type='date' class='date' v-model='lastSexDate'>
+                            <input type='date' class='date' v-model='conceptionDate'>
                             </label>
                         </div>
 
@@ -44,15 +42,14 @@
 
                     <div class='results' v-if='showResults'>
                         <h2 class='subtitle'>
-                            Calcul terme grossesse
+                            Calcul terme grossesses
                         </h2>
                         <p class='text text-justify'>
-                            Date des dernières règles: <span>{{ lastPeriodDate }}</span> <br>
-                            Vous etes enceinte de: <span> {{grossesseDuration}} </span> <br>
-                            bravo, vous avez fait: <span> {{ pourcentageGrossesse }} % du chemin</span> <br>
+                            Vous etes enceinte de: <span> {{  convertir(durationInDays)  }} </span> <br>
+                            bravo, vous avez fait: <span> {{ format((durationInDays *100)/316 ) }} % du chemin</span>
+                            <br>
                             Date estimable d'accouchement : <span>{{dueDate}}</span> <br>
                             Date limite pour déclarer votre grossesse: <span>15/03/2023</span> <br>
-                            Date de conception: <span>{{sexDate}}</span> <br>
                             Date limite pour effectuer le test de trisomie 21: <span>entre le 01/03/2023 et le
                                 15/04/2023</span>
                         </p>
@@ -177,11 +174,11 @@
                 </h2>
 
                 <p class='text text-justify' v-if='results == null'>
-                    Date des dernières règles: <span>{{ periodDate }}</span> <br>
-                    Vous etes enceinte de: <span> 25 mois </span> <br>
-                    bravo, vous avez fait: <span> 50 % du chemin</span> <br>
+                    vous êtes dans le <span>
+                        {{ durationInMonthsFormated }}{{ durationInMonthsFormated === 1 ? 'er' : 'ème' }} mois </span>
+                    <br>
+                    bravo, vous avez fait: <span> {{ format((durationInDays *100)/316 ) }} % du chemin</span> <br>
                     Date limite pour déclarer votre grossesse: <span>15/03/2023</span> <br>
-                    Date de conception: <span>{{lastSexDate}}</span> <br>
                     Date limite pour effectuer le test de trisomie 21: <span>entre le 01/03/2023 et le
                         15/04/2023</span>
                 </p>

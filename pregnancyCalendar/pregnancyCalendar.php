@@ -23,7 +23,7 @@ function displayApp()
                     <a class='navbar-brand' href='https://www.calendriers-grossesse.com'>
                         <img src='<?php echo $logo ?>' alt='calendrier de grossesse en ligne'
 width='100' height='60'>
-
+swww
 </a>
 <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent'
     aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>

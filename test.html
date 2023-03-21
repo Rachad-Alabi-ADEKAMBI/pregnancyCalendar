@@ -1,54 +1,82 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Grossesse Calculator</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment/moment.js"></script>
-  </head>
-  <body>
-    <div id="app">
-      <h1>Grossesse Calculator</h1>
-      <label for="lastPeriodDate">Date des dernières règles:</label>
-      <input type="date" id="lastPeriodDate" v-model="lastPeriodDate">
-      <button @click="calculateGrossesse()">Calculer</button>
-      <div v-if="grossesseDuration && pourcentageGrossesse">
-        <p>Durée totale de la grossesse : {{grossesseDuration}} mois</p>
-        <p>Temps écoulé : {{elapsedMonths}} mois, {{elapsedWeeks}} semaines, {{elapsedDays}} jours</p>
-        <p>Pourcentage de grossesse écoulé : {{pourcentageGrossesse}}%</p>
-      </div>
+<head>
+  <meta charset="UTF-8">
+  <title>Calculatrice de grossesse</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div>
+      <label>Date des dernières règles:</label>
+      <input type="date" v-model="lastPeriodDate">
     </div>
-    <script>
-      new Vue({
-        el: '#app',
-        data: {
-          lastPeriodDate: '',
-          grossesseDuration: '',
-          pourcentageGrossesse: '',
-          elapsedMonths: '',
-          elapsedWeeks: '',
-          elapsedDays: ''
+    <div>
+      <label>Date de conception:</label>
+      <input type="date" v-model="conceptionDate">
+    </div>
+
+    <button @click="proceed">
+        Calculer
+    </button>
+    <div>
+      <p>Durée de la grossesse:</p>
+      <p>{{ durationInDays }} jours</p>
+      <p>{{ durationInWeeks }} semaines</p>
+      <p>{{ durationInMonths }} mois</p>
+    </div>
+    <div>
+      <p>Pourcentage de la grossesse écoulée:</p>
+      <p>{{ format((durationInDays *100)/316 ) }}%</p>
+    </div>
+
+    <p>
+      vous êtes dans le {{ durationInMonthsFormated }}{{ durationInMonthsFormated === 1 ? 'er' : 'ème' }} mois
+    </p>
+    <div>
+      <p>Date probable de l'accouchement:</p>
+      <p>{{ dueDate }}</p>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        lastPeriodDate: '',
+        conceptionDate: '',
+        durationInDays: '',
+        durationInWeeks: '',
+        durationInMonths: '',
+        durationInMonthsFormated: '',
+        dueDate: ''
+      },
+      computed: {
+        getDueDate() {
+         return new Date(this.lastPeriodDate ? new Date(this.lastPeriodDate).getTime() + 288 * 24 * 60 * 60 * 1000 : new Date(this.conceptionDate).getTime() + 266 * 24 * 60 * 60 * 1000);
         },
-        methods: {
-          calculateGrossesse() {
-            const lastPeriodMoment = moment(this.lastPeriodDate);
-            const dueDateMoment = lastPeriodMoment.add(280, 'days');
-            const now = moment();
-            const grossesseDuration = moment.duration(now.diff(lastPeriodMoment)).asMonths();
-            const totalMonths = Math.floor(grossesseDuration);
-            const pourcentageGrossesse = Math.round(grossesseDuration / 2.8 * 100);
-
-            const elapsedDays = now.diff(lastPeriodMoment, 'days');
-            const elapsedWeeks = Math.floor(elapsedDays / 7);
-            const elapsedMonths = Math.floor(grossesseDuration);
-
-            this.grossesseDuration = totalMonths;
-            this.pourcentageGrossesse = pourcentageGrossesse;
-            this.elapsedMonths = elapsedMonths;
-            this.elapsedWeeks = elapsedWeeks;
-            this.elapsedDays = elapsedDays;
-          }
+        dueDateFormat() {
+          return this.dueDate.toLocaleDateString();
         }
-      })
-    </script>
-  </body>
+      },
+      methods: {
+        proceed() {
+          const today = new Date();
+          const startDate = this.lastPeriodDate ? new Date(this.lastPeriodDate) : new Date(this.conceptionDate);
+          const durationInMs = today - startDate;
+          this.durationInDays = Math.floor(durationInMs / 1000 / 60 / 60 / 24);
+          this.durationInWeeks = Math.floor(this.durationInDays / 7);
+          this.durationInMonths = Math.floor(this.durationInDays / 30);
+          this.durationInMonthsFormated = this.durationInMonths + 1;
+
+          this.dueDate = this.getDueDate;
+        },
+        format(num){
+          let res = new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 2 }).format(num);
+             return res;
+        }
+      }
+    });
+  </script>
+</body>
 </html>

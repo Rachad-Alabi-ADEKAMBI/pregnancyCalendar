@@ -39,7 +39,7 @@ html, body{
 }
 
 .main{
-    width: 97%;
+    width: 95%;
     height: 79vh;
     border-radius: 5px;
     margin:  auto;
@@ -50,7 +50,7 @@ html, body{
     background-size: auto;
     background-image:
     linear-gradient(to bottom, rgba(155, 163, 168, 0.52), rgba(165, 122, 121, 0.73)),
-    url('http://127.0.0.1/pregnancyCalendar/public/img/Humaaans%20-%20Standing.png');
+    url('https://www.calendriers-grossesse.com/wp-content/uploads/2023/03/Humaaans-Standing.png');
 
 
 
@@ -71,21 +71,21 @@ html, body{
         .proceed{
             @include flex();
             justify-content: flex-start;
+            width: 300px;
+            position: relative;
 
-            .text{
-                width: 20%;
-                text-align: left;
-            }
             .form{
                 margin-left: 15px;
                 display: block;
-                width: 45%;
+                width: 60%;
             }
 
             .btn{
-
-                    margin: 0 auto;
                     height: 40px;
+                    float: right;
+                    position: absolute;
+                    top: 50px;
+                    right: 10px;
             }
         }
 
