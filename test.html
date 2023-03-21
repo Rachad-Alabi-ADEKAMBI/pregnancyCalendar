@@ -1,54 +1,51 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Grossesse Calculator</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment/moment.js"></script>
-  </head>
-  <body>
-    <div id="app">
-      <h1>Grossesse Calculator</h1>
-      <label for="lastPeriodDate">Date des dernières règles:</label>
-      <input type="date" id="lastPeriodDate" v-model="lastPeriodDate">
-      <button @click="calculateGrossesse()">Calculer</button>
-      <div v-if="grossesseDuration && pourcentageGrossesse">
-        <p>Durée totale de la grossesse : {{grossesseDuration}} mois</p>
-        <p>Temps écoulé : {{elapsedMonths}} mois, {{elapsedWeeks}} semaines, {{elapsedDays}} jours</p>
-        <p>Pourcentage de grossesse écoulé : {{pourcentageGrossesse}}%</p>
+<head>
+  <meta charset="UTF-8">
+  <title>Calculatrice de grossesse</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div>
+      <h1>Calcul du nombre de jours d'aménorrhée</h1>
+      <form>
+        <div>
+          <label for="last-period-date">Date des dernières règles:</label>
+          <input type="date" id="last-period-date" v-model="lastPeriodDate">
+        </div>
+        <div>
+          <label for="conception-date">Date de conception:</label>
+          <input type="date" id="conception-date" v-model="conceptionDate">
+        </div>
+        <button type="button" @click="calculate">Calculer</button>
+      </form>
+      <div v-if="showResults">
+        <p>Nombre de jours d'aménorrhée: {{ AndurationInDays }}</p>
       </div>
     </div>
-    <script>
-      new Vue({
-        el: '#app',
-        data: {
-          lastPeriodDate: '',
-          grossesseDuration: '',
-          pourcentageGrossesse: '',
-          elapsedMonths: '',
-          elapsedWeeks: '',
-          elapsedDays: ''
-        },
-        methods: {
-          calculateGrossesse() {
-            const lastPeriodMoment = moment(this.lastPeriodDate);
-            const dueDateMoment = lastPeriodMoment.add(280, 'days');
-            const now = moment();
-            const grossesseDuration = moment.duration(now.diff(lastPeriodMoment)).asMonths();
-            const totalMonths = Math.floor(grossesseDuration);
-            const pourcentageGrossesse = Math.round(grossesseDuration / 2.8 * 100);
+  </div>
 
-            const elapsedDays = now.diff(lastPeriodMoment, 'days');
-            const elapsedWeeks = Math.floor(elapsedDays / 7);
-            const elapsedMonths = Math.floor(grossesseDuration);
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        lastPeriodDate: '',
+        conceptionDate: '',
+        showResults: false,
+        AndurationInDays: null,
+      },
 
-            this.grossesseDuration = totalMonths;
-            this.pourcentageGrossesse = pourcentageGrossesse;
-            this.elapsedMonths = elapsedMonths;
-            this.elapsedWeeks = elapsedWeeks;
-            this.elapsedDays = elapsedDays;
-          }
+      methods: {
+        calculate() {
+          const today = new Date();
+          const startDate = this.lastPeriodDate ? new Date(this.lastPeriodDate) : new Date(this.conceptionDate);
+          const durationInMs = today - startDate;
+          this.AndurationInDays = Math.floor(durationInMs / 1000 / 60 / 60 / 24);
+          this.showResults = true;
         }
-      })
-    </script>
-  </body>
+      },
+    });
+  </script>
+</body>
 </html>

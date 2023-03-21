@@ -1,18 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+/*
+ * Plugin Name:       pregnancyCalendar
+ * Description:       Calendrier de grossesse
+ * Version:           1.10.3
+ * Requires at least: 5.2
+ * Requires PHP:      7.2
+ * Author:            Codeur créatif
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Update URI:        https://example.com/my-plugin/
+ * Text Domain:       pregnancyCalendar
+ * Domain Path:       /languages
+ */
 
-<head>
-    <?php include 'parts/meta.php'; ?>
+function displayApp()
+{
+    $logo =
+        'https://www.calendriers-grossesse.com/wp-content/uploads/2023/03/cropped-logo-rm.png';
 
-    <title>Calendrier de grossesse - Accueil</title>
+    echo "
+        <div class='app' id='app'>
+                <nav class='navbar navbar-expand-lg navbar-light bg-light mt-0'>
+                    <a class='navbar-brand' href=''>
+                        <img src='$logo' alt='calendrier de grossesse en ligne'
+width='100' height='60'>
+swww
+</a>
+<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent'
+    aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
+    <span class='navbar-toggler-icon'></span>
+</button>
 
-</head>
 
-<body>
-    <div class="app" id="app">
-        <?php include 'parts/header.php'; ?>
+<div class='collapse navbar-collapse' id='navbarSupportedContent'>
+    <ul class='navbar-nav mx-auto'>
+        <li class='nav-item active'>
+            <a class='nav-link' href='#'>Calendrier grossesse<span class='sr-only'>(current)</span></a>
+        </li>
+        <li class='nav-item'>
+            <a class='nav-link' href='#offer'>Calcul terme grosesse</a>
+        </li>
 
-        <div class='content'>
+        <li class='nav-item'>
+            <a class='nav-link disabled' href='about'>Calcul ovulation</a>
+        </li>
+        <li class='nav-item'>
+            <a class='nav-link disabled' href='#'>Grossesse semaine par semaine</a>
+        </li>
+
+    </ul>
+</div>
+</nav>
+
+
+
+<div class='content'>
             <div class='main'>
                 <div class='main__text'>
                     <h1 class='title'>
@@ -359,9 +401,60 @@
                     méthodes ne sont pas toujours précises et ne garantissent pas une conception réussie.
                 </p>
             </div>
-        </div>
-    </div>
-    <?php include 'parts/footer.php'; ?>
-</body>
+</div>
 
-</html>
+</div>
+";
+    wp_enqueue_script(
+        'vue',
+        esc_url('https://unpkg.com/vue@3/dist/vue.global.js'),
+        [],
+        null,
+        true
+    );
+    wp_enqueue_script(
+        'app',
+        esc_url(plugin_dir_url(__FILE__) . 'public/js/app.js'),
+        ['vue'],
+        null,
+        true
+    );
+    wp_enqueue_style(
+        'bootstrap',
+        esc_url(
+            'https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css'
+        ),
+        [],
+        null
+    );
+    wp_enqueue_style(
+        'app',
+        esc_url(plugin_dir_url(__FILE__) . 'public/css/style.css'),
+        ['bootstrap'],
+        null
+    );
+    wp_enqueue_script(
+        'jquery',
+        'https://code.jquery.com/jquery-3.3.1.slim.min.js',
+        [],
+        null,
+        true
+    );
+    wp_enqueue_script(
+        'popper',
+        'https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js',
+        ['jquery'],
+        null,
+        true
+    );
+    wp_enqueue_script(
+        'bootstrap',
+        'https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js',
+        ['jquery', 'popper'],
+        null,
+        true
+    );
+}
+
+add_shortcode('pregnancyCalendar', 'displayApp');
+//add_action('wp_enqueue_scripts', 'displaySolidaire');b
