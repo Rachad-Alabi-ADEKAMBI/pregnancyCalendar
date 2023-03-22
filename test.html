@@ -8,20 +8,13 @@
 <body>
   <div id="app">
     <div>
-      <h1>Calcul du nombre de jours d'aménorrhée</h1>
-      <form>
-        <div>
-          <label for="last-period-date">Date des dernières règles:</label>
-          <input type="date" id="last-period-date" v-model="lastPeriodDate">
+      <h1>Calendar</h1>
+      <div class="calendar">
+        <div v-for="(week, index) in calendar" :key="index" class="week">
+          <div v-for="(day, index) in week" :key="index" class="day">
+            <div class="date">{{ day }}</div>
+          </div>
         </div>
-        <div>
-          <label for="conception-date">Date de conception:</label>
-          <input type="date" id="conception-date" v-model="conceptionDate">
-        </div>
-        <button type="button" @click="calculate">Calculer</button>
-      </form>
-      <div v-if="showResults">
-        <p>Nombre de jours d'aménorrhée: {{ AndurationInDays }}</p>
       </div>
     </div>
   </div>
@@ -35,15 +28,23 @@
         showResults: false,
         AndurationInDays: null,
       },
+      mounted() {
+    this.generateCalendar();
+  },
 
       methods: {
-        calculate() {
-          const today = new Date();
-          const startDate = this.lastPeriodDate ? new Date(this.lastPeriodDate) : new Date(this.conceptionDate);
-          const durationInMs = today - startDate;
-          this.AndurationInDays = Math.floor(durationInMs / 1000 / 60 / 60 / 24);
-          this.showResults = true;
+        generateCalendar() {
+      let startDate = new Date(this.currentDate);
+      startDate.setDate(startDate.getDate() - startDate.getDay());
+      for (let i = 0; i < 39; i++) {
+        let week = [];
+        for (let j = 0; j < 7; j++) {
+          week.push(startDate.getDate());
+          startDate.setDate(startDate.getDate() + 1);
         }
+        this.calendar.push(week);
+      }
+    }
       },
     });
   </script>

@@ -48,11 +48,13 @@
                             Vous êtes enceinte de: <span> {{  convertir(durationInDays)  }} </span> <br>
                             bravo, vous avez fait: <span> {{ format((durationInDays *100)/316 ) }} % du chemin</span>
                             <br>
+                            Date de conception: <span>{{ conceptionDate }}</span> <br>
                             Date estimable d'accouchement : <span>{{dueDate}}</span> <br>
                             Durée d'aménorrhées: <span>{{ Anduration }} </span> <br>
                             Date limite pour déclarer votre grossesse: <span>{{ dateOfAnnounement}}</span> <br>
-                            Date limite pour effectuer le test de trisomie 21: <span>entre le 01/03/2023 et le
-                                15/04/2023</span>
+                            Date limite pour effectuer le test de trisomie 21: entre le <span>{{ dateTriso1 }} </span>
+                            et le
+                            <span>{{ dateTriso2 }}</span>
                         </p>
                     </div>
 
@@ -72,23 +74,44 @@
 
                         <p class='text text-justify'>
                             Echographie précoce autour de <span>7 SA</span>
-                            A effectuer entre le <span>17/12/2022 </span> et le <span>13/01/2023</span> <br>
+                            : entre le <span>{{ dateEco0A }} </span> et le <span> {{ dateEco0B }} </span>
+                            <br>
 
                             1ère échographie recommandée autour de <span>12 SA</span>
-                            A effectuer entre le <span>21/01/2023</span> et le <span>17/02/2023</span> <br>
+                            : entre le <span>{{ dateEco1A}}</span> et le <span>{{ dateEco1B}}</span> <br>
 
                             2ème échographie recommandée autour de <span>22 SA</span>
-                            A effectuer entre le <span>25/03/2023</span> et le <span>05/05/2023</span> <br>
+                            : entre le <span>{{ dateEco2A }}</span> et le <span>{{ dateEco2B }}</span> <br>
 
                             3ème échographie recommandée autour de <span>32 SA</span>
-                            A effectuer entre le <span>03/06/2023</span> et le <span>14/07/2023</span>
+                            : entre le <span>{{ dateEco3A }}</span> et le <span>{{ dateEco3B }}</span>
                         </p>
                     </div>
 
 
                     <div class='results' v-if='showAppointments'>
-                        <p class='text text-justify'>
+                        <h2 class='subtitle'>
                             Consultations
+                        </h2>
+
+                        <p class="text text-justify">
+                            4ème mois de grossesse: entre le <span>{{ dateCons4A }}</span> et le
+                            <span>{{ dateCons4B }} </span> <br>
+
+                            5ème mois de grossesse: entre le <span>{{ dateCons5A }}</span> et le
+                            <span>{{ dateCons5B }} </span> <br>
+
+                            6ème mois de grossesse: entre le <span>{{ dateCons6A }}</span> et le
+                            <span>{{ dateCons6B }} </span> <br>
+
+                            7ème mois de grossesse: entre le <span>{{ dateCons7A }}</span> et le
+                            <span>{{ dateCons7B }} </span> <br>
+
+                            8ème mois de grossesse: entre le <span>{{ dateCons8A }}</span> et le
+                            <span>{{ dateCons8B }} </span> <br>
+
+                            9ème mois de grossesse: entre le <span>{{ dateCons9A }}</span> et le
+                            <span>{{ dateCons9B }} </span>
                         </p>
                     </div>
 
@@ -97,31 +120,35 @@
                             Congés
                         </h2>
                         <p class='text text-justify'>
-                            <label for=''>>
-                                Nombre d'enfant(s) déjà né(s) : <select name=' id='>
+                            <label for=''>
+                                Nombre d'enfant(s) déjà né(s) : <select name='' id='' v-model='kids'>
+                                    <option value='0'>0</option>
                                     <option value='1'>1</option>
                                     <option value='2'>2</option>
-                                    <option value='3'>3</option>
-                                    <option value='4'>4</option>
-                                    <option value='5'>5</option>
-                                    <option value='6'>6</option>
                                 </select>
                             </label> <br>
 
                             <label for=''>
-                                Vous êtes enceinte de <select name=' id='>
-                                    <option value='unique'>1 enfant</option>
+                                Vous êtes enceinte de <select name='' id='' v-model='kidsComing'>
                                     <option value='jumeaux'>Jumeaux</option>
                                     <option value='triples'>Triplés ou plus</option>
                                 </select>
-                            </label> <br>
+                            </label>
+
+                            <button class="btn btn-primary ml-5" @click="proceedVac()">
+                                Calculer
+                            </button>
+                        </p>
+
+                        <p class="text text-justify" v-if='resultsVac != null'>
+                            Début de votre congé maternité : <span>{{ dateVacA}}</span> <br>
+                            Fin de votre congé maternité : <span>{{ dateVacB}}</span> <br>
+                            Date de pris en charge l'assurance maladie:
+                            <span>{{ dateCare }}</span> <br>
+                        </p>
 
 
-                            Date de début de votre congé maternité : <span>14/07/2023</span> <br>
 
-                            Date de fin de votre congé maternité : <span>02/11/2023</span> <br>
-                            Vous serez pris en charge à 100% par l'assurance maladie à partir du :
-                            <span>27/04/2023</span> <br>
                         </p>
                     </div>
 
@@ -139,32 +166,38 @@
                     </div>
 
 
-                    <div class='buttons' v-if='showButtons'>
-                        <button class='btn btn-primary' @click='proceed()'>
+                    <div v-if="showButtons" class="buttons">
+                        <label>
+                            <input type="radio" name="menu-option" value="terme-grossesse" @click="proceed()">
                             Terme grossesse
-                        </button>
+                        </label>
 
-                        <button class='btn btn-primary' @click='displayEchography()'>
+                        <label>
+                            <input type="radio" name="menu-option" value="echographie" @click="displayEchography()">
                             Echographie
-                        </button>
+                        </label>
 
-                        <button class='btn btn-primary' @click='displayAppointments()'>
+                        <label>
+                            <input type="radio" name="menu-option" value="consultations" @click="displayAppointments()">
                             Consultations
-                        </button>
+                        </label>
 
-
-                        <button class='btn btn-primary' @click='displayVacancies()'>
+                        <label>
+                            <input type="radio" name="menu-option" value="conges-maternite" @click="displayVacancies()">
                             Congés maternité
-                        </button>
+                        </label>
 
-                        <button class='btn btn-primary' @click='displayCalendar()'>
+                        <label>
+                            <input type="radio" name="menu-option" value="calendrier" @click="displayCalendar()">
                             Calendrier
-                        </button>
+                        </label>
 
-                        <button class='btn btn-primary' @click='displayMore()'>
+                        <label>
+                            <input type="radio" name="menu-option" value="plus" @click="displayMore()">
                             Plus
-                        </button>
+                        </label>
                     </div>
+
                 </div>
 
             </div>
@@ -174,14 +207,16 @@
                     calendrier de grossesse:
                 </h2>
 
-                <p class='text text-justify' v-if='results == null'>
-                    vous êtes dans le <span>
-                        {{ durationInMonthsFormated }}{{ durationInMonthsFormated === 1 ? 'er' : 'ème' }} mois </span>
+                <p class='text text-justify' v-if='results != null'>
+                    Vous êtes enceinte de: <span> {{  convertir(durationInDays)  }} </span> <br>
+                    Bravo, vous avez fait: <span> {{ format((durationInDays *100)/316 ) }} % du chemin</span>
                     <br>
-                    bravo, vous avez fait: <span> {{ ((durationInDays *100)/270 ) }} % du chemin</span> <br>
-                    Date limite pour déclarer votre grossesse: <span>{{ datOfAnnouncement}}</span> <br>
-                    Date limite pour effectuer le test de trisomie 21: entre le<span> {{dateTriso1}}</span> et le
-                    <span>/04/2023</span>
+                    Date de conception: <span>{{ conceptionDate }}</span> <br>
+                    Durée d'aménorrhées: <span>{{ Anduration }} </span> <br>
+                    Date limite pour déclarer votre grossesse: <span>{{ dateOfAnnounement}}</span> <br>
+                    Dates limite pour effectuer le test de trisomie 21: entre le <span>{{ dateTriso1 }} </span>
+                    et le
+                    <span>{{ dateTriso2 }}</span>
                 </p>
 
                 <p class='text'>
@@ -193,16 +228,16 @@
             </div>
             <hr>
 
-            <div class='item'>
+            <div class='item' id="dueDate">
                 <h2>
                     calcul date d'accouchement
                 </h2>
 
-                <p class='text'>
+                <p class='text text-justify' v-if='results != null'>
                     Date estimable d'accouchement : <span>{{dueDate}}</span> <br>
                 </p>
 
-                <p class='text text-justify' v-if='results == null'>
+                <p class='text text-justify'>
                     Le calcul de la date d'accouchement d'une femme enceinte est basé sur la date prévue de sa dernière
                     période menstruelle. Cela consiste à ajouter 280 jours à la date du premier jour de sa dernière
                     période menstruelle. La date d'accouchement est une estimation et le bébé peut arriver à tout moment
@@ -217,20 +252,20 @@
                     Calcul dates des échographies
                 </h2>
 
-                <p class='text text-justify' v-if='results == null'>
+                <p class='text text-justify' v-if='results != null'>
 
 
                     Echographie précoce autour de 7 SA
-                    A effectuer entre <span>le 17/12/2022 et le 13/01/2023
+                    : entre <span>le 17/12/2022 et le 13/01/2023
                     </span> <br>
                     1ère échographie recommandée autour de 12 SA
-                    A effectuer entre le <span>21/01/2023 et le 17/02/2023</span> <br>
+                    : entre le <span>21/01/2023 et le 17/02/2023</span> <br>
 
                     2ème échographie recommandée autour de 22 SA
-                    A effectuer entre le <span>25/03/2023 et le 05/05/2023
+                    : entre le <span>25/03/2023 et le 05/05/2023
                     </span> <br>
                     3ème échographie recommandée autour de 32 SA
-                    A effectuer entre le <span>03/06/2023 et le 14/07/2023
+                    : entre le <span>03/06/2023 et le 14/07/2023
                     </span>
                 </p>
 
@@ -249,24 +284,24 @@
                     Consultations
                 </h2>
 
-                <p class='text text-justify' v-if='results == null'>
-                    Consultation du 4ème mois de grossesse
-                    A effectuer entre le <span>25/02/2023 et le 27/03/2023</span> <br>
+                <p class='text text-justify' v-if='results != null'>
+                    4ème mois de grossesse
+                    : entre le <span>25/02/2023 et le 27/03/2023</span> <br>
 
-                    Consultation du 5ème mois de grossesse
-                    A effectuer entre le <span> 28/03/2023 et le 28/04/2023</span> <br>
+                    5ème mois de grossesse
+                    : entre le <span> 28/03/2023 et le 28/04/2023</span> <br>
 
-                    Consultation du 6ème mois de grossesse
-                    A effectuer entre le <span>29/04/2023 et le 29/05/2023</span> <br>
+                    6ème mois de grossesse
+                    : entre le <span>29/04/2023 et le 29/05/2023</span> <br>
 
-                    Consultation du 7ème mois de grossesse
-                    A effectuer entre le <span>30/05/2023 et le 26/06/2023</span> <br>
+                    7ème mois de grossesse
+                    : entre le <span>30/05/2023 et le 26/06/2023</span> <br>
 
-                    Consultation du 8ème mois de grossesse
-                    A effectuer entre le <span>27/06/2023 et le 26/07/2023</span> <br>
+                    8ème mois de grossesse
+                    : entre le <span>27/06/2023 et le 26/07/2023</span> <br>
 
-                    Consultation du 9ème mois de grossesse
-                    A effectuer entre le <span>27/07/2023 et le 25/08/2023</span> <br>
+                    9ème mois de grossesse
+                    : entre le <span>27/07/2023 et le 25/08/2023</span> <br>
                 </p>
 
                 <p class='text'>
@@ -283,32 +318,35 @@
                     Congés maternité
                 </h2>
 
-                <p class='text text-justify' v-if='results == null'>
+                <p class='text text-justify' v-if='results != null'>
                     <label for=''>
-                        Nombre d'enfant(s) déjà né(s) : <select name=' id='>
+                        Nombre d'enfant(s) déjà né(s) : <select name='' id='' v-model='kids'>
+                            <option value='0'>0</option>
                             <option value='1'>1</option>
                             <option value='2'>2</option>
-                            <option value='3'>3</option>
-                            <option value='4'>4</option>
-                            <option value='5'>5</option>
-                            <option value='6'>6</option>
                         </select>
                     </label> <br>
 
                     <label for=''>
-                        Vous êtes enceinte de <select name=' id='>
+                        Vous êtes enceinte de <select name='' id='' v-model='kidsComing'>
                             <option value='jumeaux'>Jumeaux</option>
                             <option value='triples'>Triplés ou plus</option>
                         </select>
-                    </label> <br>
+                    </label>
 
-
-                    Date de début de votre congé maternité : <span>14/07/2023</span> <br>
-
-                    Date de fin de votre congé maternité : <span>02/11/2023</span> <br>
-                    Vous serez pris en charge à 100% par l'assurance maladie à partir du :
-                    <span>27/04/2023</span> <br>
+                    <button class="btn btn-primary" onclick="proceedVac()">
+                        Calculer
+                    </button>
                 </p>
+                <br>
+
+                <p class="text text-justify" v-if='resultsVac != null'>
+                    Date de début de votre congé maternité : <span>{{ dateVacA}}</span> <br>
+                    Date de fin de votre congé maternité : <span>{{ dateVacB}}</span> <br>
+                    Vous serez pris en charge à 100% par l'assurance maladie à partir du :
+                    <span>{{ dateCare }}</span> <br>
+                </p>
+
 
                 <p class='text'>
                     Le congé maternité est un temps de repos accordé à la mère après l'accouchement pour récupérer et

@@ -97,13 +97,13 @@ html, body{
         .buttons{
             @include flex();
            // position: absolute;
-            bottom: 10px;
+         //   bottom: 15px;
             left: 10px;
             justify-content: flex-start;
-            margin: 15px auto;
+            margin: 15px auto 5px auto;
 
-            .btn{
-                margin: 5px;
+            label{
+                margin: 10px;
             }
         }
     }

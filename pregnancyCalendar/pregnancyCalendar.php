@@ -21,10 +21,9 @@ function displayApp()
     echo "
         <div class='app' id='app'>
                 <nav class='navbar navbar-expand-lg navbar-light bg-light mt-0'>
-                    <a class='navbar-brand' href=''>
+                    <a class='navbar-brand' href='#'>
                         <img src='$logo' alt='calendrier de grossesse en ligne'
 width='100' height='60'>
-swww
 </a>
 <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent'
     aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
