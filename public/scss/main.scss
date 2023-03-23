@@ -1,4 +1,4 @@
-@import url('https://fonts.cdnfonts.com/css/berkshire-swash');
+@import url('https://fonts.cdnfonts.com/css/verdana');
 
 $pink: #f0c7c2;
 $blue: #393F82;
@@ -17,8 +17,7 @@ html, body{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Berkshire Swash', sans-serif;
-    background-color: antiquewhite;
+    background-color: $pink;
 }
 
 .btn-primary{
@@ -39,8 +38,8 @@ html, body{
 }
 
 .main{
-    width: 95%;
-    height: 79vh;
+    width: 90%;
+    height: 83vh;
     border-radius: 5px;
     margin:  auto;
     background-color: rgb(128, 128, 187);
@@ -62,10 +61,31 @@ html, body{
 
         h1{
             margin: 15px auto;
+            font-family: 'Verdana', sans-serif;
+
+            span{
+                margin-left: 10px;
+
+                a{
+                    cursor: pointer;
+                    color: $blue;
+                    font-weight: bold;
+                    i{
+                        color: $blue;
+                        font-size: 1em;
+                        font-weight: bold;
+                    }
+                }
+
+                a:hover{
+                    font-size: larger;
+                }
+            }
         }
 
         span{
             color: $blue;
+            font-weight: bold;
         }
 
         .proceed{
@@ -76,8 +96,9 @@ html, body{
 
             .form{
                 margin-left: 15px;
-                display: block;
-                width: 60%;
+                @include flex();
+                justify-content: flex-start;
+                width: 80%;
             }
 
             .btn{

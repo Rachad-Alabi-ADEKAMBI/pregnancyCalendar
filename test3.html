@@ -1,0 +1,38 @@
+<template>
+  <div>
+    <h1>Calendrier</h1>
+    <input type="date" v-model="selectedDate" @change="updateCalendar">
+    <div v-for="week in calendar" :key="week[0].getTime()" class="week">
+      <div v-for="day in week" :key="day.getTime()" class="day">{{ day.getDate() }}</div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      selectedDate: new Date().toISOString().substr(0, 10), // par défaut aujourd'hui
+      calendar: [],
+    };
+  },
+  methods: {
+    updateCalendar() {
+      const selectedDate = new Date(this.selectedDate);
+      const calendar = [];
+      for (let i = 0; i < 36; i++) { // 9 mois = 36 semaines
+        const week = [];
+        for (let j = 0; j < 7; j++) {
+          const date = new Date(selectedDate.getTime() + (i * 7 + j) * 86400000); // 1 jour = 86400000 ms
+          week.push(date);
+        }
+        calendar.push(week);
+      }
+      this.calendar = calendar;
+    },
+  },
+  mounted() {
+    this.updateCalendar();
+  },
+};
+</script>

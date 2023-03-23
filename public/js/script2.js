@@ -13,12 +13,11 @@ createApp({
       results: null,
       lastPeriodDate: '',
       conceptionDate: '',
-      durationInMs: '',
       durationInDays: '',
       durationInWeeks: '',
       durationInMonths: '',
+      durationInMonthsFormated: '',
       dueDate: '',
-      dueDateFormated: '',
       AndurationInDays: '',
       AndurationInDays: '',
       Anduration: '',
@@ -54,13 +53,21 @@ createApp({
       prematureDate: '',
       anesthDate: '',
       dateVagA: '',
-      dateVagB: '',
-      fecondDateA: '',
-      fecondDateB: ''
+      dateVagB: ''
     }
   },
   computed: {
-
+    getDueDate() {
+      return new Date(
+        this.lastPeriodDate
+          ? new Date(this.lastPeriodDate).getTime() + 289 * 24 * 60 * 60 * 1000
+          : new Date(this.conceptionDate).getTime() + 267 * 24 * 60 * 60 * 1000
+      );
+    },
+    dueDateFormat() {
+     // return this.dueDate.toLocaleDateString();
+     return this.dueDate;
+    }
   },
   methods: {
     proceed() {
@@ -68,49 +75,60 @@ createApp({
         alert('Veuillez renseigner soit la date des dernières règles soit celle de la conception');
       } else {
 
-        if (this.conceptionDate === '') {
-          const startDate = new Date(this.lastPeriodDate);
-          startDate.setDate(startDate.getDate() + 14);
-        this.conceptionDate = startDate;
-        }
-
-        const today = new Date();
-
-        this.durationInMs = today - this.conceptionDate;
-
-        if(this.durationInMs < 0){
-         alert("Merci de vérifier la date insérée");
-         exit();
-        }
-
-       this.durationInDays = Math.floor((this.durationInMs / 1000 / 60 / 60 / 24));
 
         if(this.durationInDays > 300){
           alert("Merci de vérifier la date insérée")
         } else{
           this.results = 'ok';
 
+          const today = new Date();
+          const startDate = this.lastPeriodDate  ? new Date(this.lastPeriodDate) : new Date(this.conceptionDate);
+          const durationInMs = today - startDate;
+          this.durationInDays = Math.floor((durationInMs / 1000 / 60 / 60 / 24));
+
+          if(this.conceptionDate = ''){
+
+          }
+
+
+
+          /*
+           if (this.conceptionDate === '') {
+            const startDate = new Date(this.lastPeriodDate);
+            startDate.setDate(startDate.getDate() + 14);
+          this.conceptionDate = startDate.toLocaleDateString('fr-FR');
+
+          }
+
           this.durationInWeeks = Math.floor(this.durationInDays / 7);
           this.durationInMonths = Math.floor(this.durationInDays / 30);
           this.durationInMonthsFormated = this.durationInMonths + 1;
 
-          function addDays(date, days) {
-            var result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result;
+          this.dueDate = this.getDueDate.toLocaleDateString('fr-FR');
+
+          this.AndurationInDays = Math.floor(durationInMs / 1000 / 60 / 60 / 24);
+          this.AndurationInWeeks = Math.floor(this.AndurationInDays / 7);
+          if (this.AndurationInDays % 7 === 0) {
+            this.Anduration = this.AndurationInWeeks + ' semaines';
+          } else if (this.AndurationInWeeks === 0) {
+            this.Anduration = this.AndurationInDays + ' jour' + (this.AndurationInDays > 1 ? 's' : '');
+          } else {
+            this.Anduration = this.AndurationInWeeks + ' semaines ' + (this.AndurationInDays % 7) + ' jour' + ((this.AndurationInDays % 7) > 1 ? 's' : '');
           }
-          this.dueDate = addDays(this.conceptionDate, 266);
 
-          this.AndurationInDays = this.durationInDays + 14;
+          this.dateOfAnnounement =  new Date(
+           ( this.lastPeriodDate
+            ? new Date(this.lastPeriodDate).getTime() + 104 * 24 * 60 * 60 * 1000
+            : new Date(this.conceptionDate).getTime() + 89 * 24 * 60 * 60 * 1000)
+          ).toLocaleDateString('fr-FR');;
 
-          this.dateOfAnnounement = addDays(this.conceptionDate, 90);
+          //trisomie 21
+            const startDate = new Date(this.lastPeriodDate);
+            startDate.setDate(startDate.getDate() + 78);
+          this.dateTriso1 = startDate.toLocaleDateString('fr-FR');
 
-          this.dateTriso1 = addDays(this.conceptionDate + 14 + 77 )
-
-          this.dateTriso2 = addDays(this.conceptionDate + 14 + 98 )
-
-
-/*
+          startDate.setDate(startDate.getDate() + 20);
+        this.dateTriso2 = startDate.toLocaleDateString('fr-FR');
 
 
         //echographies
@@ -191,7 +209,10 @@ createApp({
 
         nextPrematureStartDate.setDate(nextPrematureStartDate.getDate() +27);
         this.dateVagB = nextPrematureStartDate.toLocaleDateString('fr-FR');
-*/
+
+
+
+          */
 
 
           this.showResults = true;
@@ -252,32 +273,21 @@ createApp({
 
         }
       },
-       formatDate(date) {
-        const formattedDate = date.toLocaleDateString('fr-FR');
-        return formattedDate;
-      },
-      convertir(jours) {
-        const joursParMois = 30.44;
-        const joursParSemaine = 7;
 
-        const mois = Math.floor(jours / joursParMois);
-        const resteMois = jours % joursParMois;
+    convertir(jours) {
+      const joursParMois = 30.44;
+      const joursParSemaine = 7;
 
-        const semaines = Math.floor(resteMois / joursParSemaine);
-        const resteSemaines = resteMois % joursParSemaine;
+      const mois = Math.floor(jours / joursParMois);
+      const resteMois = jours % joursParMois;
 
-        const joursRestants = Math.floor(resteSemaines);
+      const semaines = Math.floor(resteMois / joursParSemaine);
+      const resteSemaines = resteMois % joursParSemaine;
 
-        // Ajouter "s" si nécessaire
-        const moisPluriel = mois > 1 ? "mois" : "mois";
-        const semainesPluriel = semaines > 1 ? "semaines" : "semaine";
-        const joursPluriel = joursRestants > 1 ? "jours" : "jour";
+      const joursRestants = Math.floor(resteSemaines);
 
-        return `${mois} ${moisPluriel}, ${semaines} ${semainesPluriel} et ${joursRestants} ${joursPluriel}`;
-      },
-
-
-
+      return `${mois} mois, ${semaines} semaine(s) et ${joursRestants} jour(s)`;
+    },
     format(num) {
       let res = new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 2 }).format(num);
       return res;
@@ -329,7 +339,7 @@ createApp({
       this.showOvulation= true
      },
     format(num){
-    let res = new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 1 }).format(num);
+    let res = new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 3 }).format(num);
     return res;
 },
     getImgUrl(pic) {

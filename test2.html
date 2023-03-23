@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+        <div id="app">
+            <label for="dateInput">Entrez une date:</label>
+            <input id="dateInput" v-model="date" type="date" @change="generateCalendar" />
+            <div class="calendar">
+              <div v-for="(week, index) in weeks" :key="index" class="week">
+                <div v-for="day in week" :key="day.date" :class="{ 'today': day.isToday, 'selected': day.isSelected }">
+                  {{ day.date.getDate() }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+    <script>
+        new Vue({
+  el: '#app',
+  data: {
+    date: '',
+    weeks: [],
+    selectedDate: null
+  },
+  methods: {
+    generateCalendar() {
+      this.weeks = [];
+
+      if (this.date) {
+        const start = new Date(this.date);
+        const end = new Date(start);
+        end.setMonth(start.getMonth() + 9);
+
+        let current = new Date(start);
+        let week = [];
+
+        while (current <= end) {
+          if (current.getDay() === 0 && week.length > 0) {
+            this.weeks.push(week);
+            week = [];
+          }
+
+          week.push({
+            date: new Date(current),
+            isToday: this.isToday(current),
+            isSelected: this.isSelected(current)
+          });
+
+          current.setDate(current.getDate() + 1);
+        }
+
+        if (week.length > 0) {
+          this.weeks.push(week);
+        }
+      }
+    },
+    isToday(date) {
+      const today = new Date();
+      return date.toDateString() === today.toDateString();
+    },
+    isSelected(date) {
+      if (this.selectedDate) {
+        return date.toDateString() === this.selectedDate.toDateString();
+      }
+      return false;
+    }
+  },
+  watch: {
+    date() {
+      this.selectedDate = null;
+      this.generateCalendar();
+    }
+  }
+});
+
+    </script>
+</body>
+</html>
