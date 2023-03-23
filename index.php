@@ -7,6 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 
     <title>Calendrier de grossesse - Accueil</title>
@@ -14,7 +16,7 @@
 </head>
 
 <body>
-    <div class='app' id="app">
+    <div class='app' id='app'>
         <div class='content'>
             <div class='main'>
                 <div class='main__text'>
@@ -38,7 +40,8 @@
                             </label>
                         </div>
 
-                        <button @click='proceed()' class='btn btn-primary'>
+                        <button @click='proceed()' class='btn btn-primary' style='background: #f0c7c2;
+                        border: none; color: #393F82;'>
                             Calculer
                         </button>
 
@@ -46,7 +49,7 @@
 
                     <div class='results' v-if='showResults'>
                         <h2 class='subtitle'>
-                            Calcul terme grossesses <span><a href=""><i class="fas fa-question"></i></a></span>
+                            Calcul terme grossesse <span><a href='#calendar'><i class='fas fa-question'></i></a></span>
                         </h2>
                         <p class='text text-justify'>
                             Vous êtes enceinte de: <span> {{  convertir(durationInDays)  }} </span> <br>
@@ -61,67 +64,95 @@
 
                     <div class='results' v-if='showOvulation'>
                         <h2 class='subtitle'>
-                            Calcul ovulation
+                            Calcul ovulation <span><a href='#ovulation'><i class='fas fa-question'></i></a></span>
                         </h2>
+
                         <p class='text text-justify'>
-                        <p class='text text-justify'>
-                            Vous êtes féconde entre le <span> {{  fecondDateA  }} </span> et le
-                            <span>{{ fecondDateB }}</span> <br>
+                            <label for=''>
+                                Cycle : <select name='' id='' v-model='cycle' style='height: 28px'>
+                                    <option value='24'>24</option>
+                                    <option value='28'>28</option>
+                                    <option value='36'>36</option>
+                                </select>
+                            </label> <br>
+
+
+                            <button class='btn btn-primary ml-5' @click='proceedFert()'
+                                style='background-color: #f0c7c2'>
+                                Calculer
+                            </button>
                         </p>
+
+
+                        <p class='text text-justify' v-if='resultsFert != null'>
+                            <strong>Période d'ovulation:</strong> entre le<span> {{  formatDate(fecondDateA)  }} </span>
+                            et le
+                            <span>{{  formatDate(fecondDateB) }}</span> <br>
                         </p>
                     </div>
 
                     <div class='results' v-if='showEchography'>
                         <h2 class='subtitle'>
-                            Dates d'échographie
+                            Dates d'échographie <span><a href='#echography'><i class='fas fa-question'></i></a></span>
                         </h2>
 
                         <p class='text text-justify'>
-                            Echographie précoce: entre le <span>{{ dateEco0A }} </span> et le <span> {{ dateEco0B }}
+                            <strong>Echographie précoce:</strong> entre le <span>{{ formatDate(dateEco0A) }} </span> et
+                            le
+                            <span> {{ formatDate(dateEco0B) }}
                             </span>
                             <br>
 
-                            1ère échographie recommandée:
-                            : entre le <span>{{ dateEco1A}}</span> et le <span>{{ dateEco1B}}</span> <br>
+                            <strong>1ère échographie recommandée:</strong>
+                            entre le <span>{{ formatDate(dateEco1A) }}</span> et le
+                            <span>{{ formatDate(dateEco1B)}}</span> <br>
 
-                            2ème échographie recommandée:
-                            : entre le <span>{{ dateEco2A }}</span> et le <span>{{ dateEco2B }}</span> <br>
+                            <strong>2ème échographie recommandée:</strong>
+                            entre le <span>{{ formatDate(dateEco2A ) }}</span> et le
+                            <span>{{ formatDate(dateEco2B) }}</span> <br>
 
-                            3ème échographie:
-                            : entre le <span>{{ dateEco3A }}</span> et le <span>{{ dateEco3B }}</span>
+                            <strong>3ème échographie:</strong>
+                            entre le <span>{{ formatDate(dateEco3A) }}</span> et le
+                            <span>{{ formatDate(dateEco3B) }}</span>
                         </p>
                     </div>
 
 
                     <div class='results' v-if='showAppointments'>
                         <h2 class='subtitle'>
-                            Consultations
+                            Consultations <span><a href='#appointments'><i class='fas fa-question'></i></a></span>
                         </h2>
 
                         <p class='text text-justify'>
-                            4ème mois de grossesse: entre le <span>{{ dateCons4A }}</span> et le
-                            <span>{{ dateCons4B }} </span> <br>
+                            <strong> 4ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons4A) }}</span>
+                            et le
+                            <span>{{ formatDate(dateCons4B) }} </span> <br>
 
-                            5ème mois de grossesse: entre le <span>{{ dateCons5A }}</span> et le
-                            <span>{{ dateCons5B }} </span> <br>
+                            <strong>5ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons5A) }}</span>
+                            et le
+                            <span>{{ formatDate(dateCons5B) }} </span> <br>
 
-                            6ème mois de grossesse: entre le <span>{{ dateCons6A }}</span> et le
-                            <span>{{ dateCons6B }} </span> <br>
+                            <strong>6ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons6A) }}</span>
+                            et le
+                            <span>{{ formatDate(dateCons6B) }} </span> <br>
 
-                            7ème mois de grossesse: entre le <span>{{ dateCons7A }}</span> et le
-                            <span>{{ dateCons7B }} </span> <br>
+                            <strong>7ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons7A) }}</span>
+                            et le
+                            <span>{{ formatDate(dateCons7B) }} </span> <br>
 
-                            8ème mois de grossesse: entre le <span>{{ dateCons8A }}</span> et le
-                            <span>{{ dateCons8B }} </span> <br>
+                            <strong> 8ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons8A) }}</span>
+                            et le
+                            <span>{{ formatDate(dateCons8B) }} </span> <br>
 
-                            9ème mois de grossesse: entre le <span>{{ dateCons9A }}</span> et le
-                            <span>{{ dateCons9B }} </span>
+                            <strong> 9ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons9A) }}</span>
+                            et le
+                            <span>{{ formatDate(dateCons9B) }} </span>
                         </p>
                     </div>
 
                     <div class='results' v-if='showVacancies'>
                         <h2 class='subtitle'>
-                            Congés
+                            Congés <span><a href='#vacancies'><i class='fas fa-question'></i></a></span>
                         </h2>
                         <p class='text text-justify'>
                             <label for=''>
@@ -141,39 +172,46 @@
                             </label>
 
                             <button class='btn btn-primary ml-5' @click='proceedVac()'
-                                style="background-color: #f0c7c2">
+                                style='background-color: #f0c7c2'>
                                 Calculer
                             </button>
                         </p>
 
                         <p class='text text-justify' v-if='resultsVac != null'>
-                            Début de votre congé maternité : <span>{{ dateVacA}}</span> <br>
-                            Fin de votre congé maternité : <span>{{ dateVacB}}</span> <br>
-                            Date de pris en charge l'assurance maladie:
-                            <span>{{ dateCare }}</span> <br>
+                            <strong> Date limite pour déclarer votre grossesse:</strong>
+                            <span>{{ dateOfAnnounement}}</span>
+                            <br>
+
+                            <strong>Date de début de votre congé maternité: </strong>
+                            <span>{{ formatDate(dateVacA)}}</span>
+                            <br>
+                            <strong>Date de fin de votre congé maternité:</strong>
+                            <span>{{ formatDate(dateVacB)}}</span> <br>
+                            <strong>Vous serez pris en charge à 100% par l'assurance maladie à partir du:</strong>
+                            <span>{{ formatDate(dateCare) }}</span> <br>
                         </p>
 
-
-
-                        </p>
                     </div>
 
 
                     <div class='results' v-if='showMore'>
                         <h2 class='subtitle'>
-                            Plus
+                            Plus <span><a href='#more'><i class='fas fa-question'></i></a></span>
                         </h2>
                         <p class='text text-justify'>
-                            Votre bébé n'est plus prématuré à partir du: <span>{{ formatDate(prematureDate) }}</span>
+                            <strong>Votre bébé n'est plus prématuré à partir du:</strong>
+                            <span>{{ formatDate(prematureDate) }}</span>
                             <br>
-                            Date limite pour effectuer le test de trisomie 21: entre le
+                            <strong> Date limite pour effectuer le test de trisomie 21:</strong> entre le
                             <span>{{ formatDate(dateTriso1) }}
                             </span>
                             et le
                             <span>{{ formatDate(dateTriso2) }}</span> <br>
-                            La consultation avec l'anesthésiste est à effectuer à partir du
+                            <strong>Consultation avec l'anesthésiste:</strong>
+                            à partir du
                             <span>{{ formatDate(anesthDate) }}</span> <br>
-                            Le prélèvement vaginal est à éffectuer entre le <span>{{ formatDate(dateVagA) }}</span> et
+                            <strong>Prélèvement vaginal</strong>: à éffectuer entre le
+                            <span>{{ formatDate(dateVagA) }}</span> et
                             le
                             <span>{{ formatDate(dateVagB) }}</span> <br>
                         </p>
@@ -221,16 +259,46 @@
                     calendrier de grossesse:
                 </h2>
 
+                <button class='btn btn-primary' @click='proceedCalendar()' v-if='showButton' style='background-color: #393F82;
+                color: #f0c7c2'>
+                    Afficher le calendrier
+                </button>
+
+                <div class='calendar mb-3' v-if='showCalendar'>
+                    <div class='close mr-2 mt-1' @click='closeCalendar()'>
+                        <i class="fas fa-x"></i>X
+                    </div>
+                    <p class="text text-center mt-2">
+                        Semaine de grossesse: {{ currentWeek +1}}
+                    </p>
+                    <div class="weeks">
+                        <div class="container">
+                            <div class="row">
+                                <div v-for="(week, index) in calendar" :key="index"
+                                    :class="['week', 'col-2', { 'box': index === currentWeek }]">
+                                    <h4>Semaine {{ index + 1 }}</h4>
+                                    <ul>
+                                        <li v-for="(day, dayIndex) in week" :key="dayIndex">
+                                            {{ day }} {{ }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
                 <p class='text text-justify' v-if='results != null'>
                     Vous êtes enceinte de: <span> {{  convertir(durationInDays)  }} </span> <br>
-                    Bravo, vous avez fait: <span> {{ format((durationInDays *100)/316 ) }} % du chemin</span>
+                    bravo, vous avez fait: <span> {{ format((durationInDays *100)/280 ) }} % du chemin</span>
                     <br>
-                    Date de conception: <span>{{ conceptionDate }}</span> <br>
-                    Durée d'aménorrhées: <span>{{ Anduration }} </span> <br>
-                    Date limite pour déclarer votre grossesse: <span>{{ dateOfAnnounement}}</span>
+                    Date de conception: <span>{{ formatDate(conceptionDate) }}</span> <br>
+                    Date d'accouchement : <span>{{  formatDate(dueDate)  }}</span> <br>
+                    Durée d'aménorrhées: <span>{{ convertir(AndurationInDays) }} </span> <br>
+                    Date limite pour déclarer votre grossesse: <span>{{ formatDate(dateOfAnnounement) }}</span>
                 </p>
-
-                <p class='text'>
+                <p class='text text-justify'>
                     Le calendrier de grossesse d'une femme est un outil utile pour suivre les différentes étapes de la
                     grossesse et s'assurer que tout se passe bien pour la mère et le bébé. Il commence généralement à la
                     date prévue de la dernière période menstruelle et se poursuit jusqu'à la naissance du bébé, soit
@@ -245,13 +313,15 @@
                 </h2>
 
                 <p class='text text-justify' v-if='results != null'>
-                    Date d'accouchement : <span>{{dueDate}}</span> <br>
+                    Date d'accouchement : <span>{{  formatDate(dueDate)}}</span> <br>
                 </p>
 
                 <p class='text text-justify'>
                     La plupart des personnes ne connaissent pas la date exacte de conception, c'est pourquoi le terme
                     est de 280 jours à compter du premier jour des dernières règles. Si vous connaissez votre date
-                    de conception, la date d'accouchement peut être calculée en lui ajoutant 266 jours. Il est
+                    de conception, la date d'accouchement peut être calculée en lui ajoutant 266 jours. Une marge de 7
+                    jours
+                    en plus ou en moins est à prendre en considération. Il est
                     important de se préparer à l'arrivée
                     du bébé en ayant un plan de naissance et un sac de maternité prêts.
                 </p>
@@ -264,17 +334,23 @@
                 </h2>
 
                 <p class='text text-justify' v-if='results != null'>
-                    Echographie précoce: entre le <span>{{ dateEco0A }} </span> et le <span> {{ dateEco0B }} </span>
+                    <strong>Echographie précoce:</strong> entre le <span>{{ formatDate(dateEco0A) }} </span> et
+                    le
+                    <span> {{ formatDate(dateEco0B) }}
+                    </span>
                     <br>
 
-                    1ère échographie recommandée:
-                    : entre le <span>{{ dateEco1A}}</span> et le <span>{{ dateEco1B}}</span> <br>
+                    <strong>1ère échographie recommandée:</strong>
+                    entre le <span>{{ formatDate(dateEco1A) }}</span> et le
+                    <span>{{ formatDate(dateEco1B)}}</span> <br>
 
-                    2ème échographie recommandée:
-                    : entre le <span>{{ dateEco2A }}</span> et le <span>{{ dateEco2B }}</span> <br>
+                    <strong>2ème échographie recommandée:</strong>
+                    entre le <span>{{ formatDate(dateEco2A ) }}</span> et le
+                    <span>{{ formatDate(dateEco2B) }}</span> <br>
 
-                    3ème échographie:
-                    : entre le <span>{{ dateEco3A }}</span> et le <span>{{ dateEco3B }}</span>
+                    <strong>3ème échographie:</strong>
+                    entre le <span>{{ formatDate(dateEco3A) }}</span> et le
+                    <span>{{ formatDate(dateEco3B) }}</span>
                 </p>
 
                 <p class='text text-justify'>
@@ -297,23 +373,29 @@
                 </h2>
 
                 <p class='text text-justify' v-if='results != null'>
-                    4ème mois de grossesse
-                    : entre le <span>25/02/2023 et le 27/03/2023</span> <br>
+                    <strong> 4ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons4A) }}</span>
+                    et le
+                    <span>{{ formatDate(dateCons4B) }} </span> <br>
 
-                    5ème mois de grossesse
-                    : entre le <span> 28/03/2023 et le 28/04/2023</span> <br>
+                    <strong>5ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons5A) }}</span>
+                    et le
+                    <span>{{ formatDate(dateCons5B) }} </span> <br>
 
-                    6ème mois de grossesse
-                    : entre le <span>29/04/2023 et le 29/05/2023</span> <br>
+                    <strong>6ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons6A) }}</span>
+                    et le
+                    <span>{{ formatDate(dateCons6B) }} </span> <br>
 
-                    7ème mois de grossesse
-                    : entre le <span>30/05/2023 et le 26/06/2023</span> <br>
+                    <strong>7ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons7A) }}</span>
+                    et le
+                    <span>{{ formatDate(dateCons7B) }} </span> <br>
 
-                    8ème mois de grossesse
-                    : entre le <span>27/06/2023 et le 26/07/2023</span> <br>
+                    <strong> 8ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons8A) }}</span>
+                    et le
+                    <span>{{ formatDate(dateCons8B) }} </span> <br>
 
-                    9ème mois de grossesse
-                    : entre le <span>27/07/2023 et le 25/08/2023</span> <br>
+                    <strong> 9ème mois de grossesse:</strong> entre le <span>{{ formatDate(dateCons9A) }}</span>
+                    et le
+                    <span>{{ formatDate(dateCons9B) }} </span>
                 </p>
 
                 <p class='text text-justify'>
@@ -347,19 +429,21 @@
                     </label>
 
                     <button class='btn btn-primary' @click='proceedVac()'
-                        style="color: #f0c7c2; margin-left: 10px; background-color: #393F82">
+                        style='color: #f0c7c2; margin-left: 10px; background-color: #393F82'>
                         Calculer
                     </button>
                 </p>
                 <br>
 
                 <p class='text text-justify' v-if='resultsVac != null'>
-                    Date limite pour déclarer votre grossesse: <span>{{ dateOfAnnounement}}</span> <br>
+                    <strong> Date limite pour déclarer votre grossesse:</strong> <span>{{ dateOfAnnounement}}</span>
+                    <br>
 
-                    Date de début de votre congé maternité : <span>{{ dateVacA}}</span> <br>
-                    Date de fin de votre congé maternité : <span>{{ dateVacB}}</span> <br>
-                    Vous serez pris en charge à 100% par l'assurance maladie à partir du :
-                    <span>{{ dateCare }}</span> <br>
+                    <strong>Date de début de votre congé maternité: </strong> <span>{{ formatDate(dateVacA)}}</span>
+                    <br>
+                    <strong>Date de fin de votre congé maternité:</strong> <span>{{ formatDate(dateVacB)}}</span> <br>
+                    <strong>Vous serez pris en charge à 100% par l'assurance maladie à partir du:</strong>
+                    <span>{{ formatDate(dateCare) }}</span> <br>
                 </p>
 
 
@@ -382,13 +466,36 @@
                     calcul date d'ovulation
                 </h2>
 
-                <p class='text'>
-                    La date d'ovulation est la période de fertilité maximale chez la femme et détermine la période la
-                    plus propice pour concevoir un enfant. En général, l'ovulation se produit environ 14 jours avant le
-                    début des prochaines règles. Cependant, cela peut varier en fonction de la durée du cycle menstruel
-                    de chaque femme. Par exemple, pour un cycle menstruel de 28 jours, l'ovulation se produirait
-                    généralement autour du 14ème jour, tandis que pour un cycle de 32 jours, l'ovulation serait prévue
-                    autour du 18ème jour.
+                <p class='text text-justify' v-if='results != null'>
+                    <label for=''>
+                        Cycle : <select name='' id='' v-model='cycle' style='height: 28px'>
+                            <option value='24'>24</option>
+                            <option value='28'>28</option>
+                            <option value='36'>36</option>
+                        </select>
+                    </label> <br>
+
+
+                    <button class='btn btn-primary ml-5' @click='proceedVac()'
+                        style='color: #f0c7c2; margin-left: 10px; background-color: #393F82'>
+                        Calculer
+                    </button>
+                </p>
+
+
+                <p class='text text-justify' v-if='resultsFert != null'>
+                    <strong>Période d'ovulation:</strong> entre le< span> {{  formatDate(fecondDateA)  }} </>
+                    et le
+                    <span>{{  formatDate(fecondDateB) }}</span> <br>
+                </p>
+
+
+                <p class='text text-justify'>
+                    Pour déterminer votre cycle d’ovulation, il suffit en définitive de connaître votre cycle menstruel.
+                    Celui-ci commence le premier jour de vos règles et s’achève le premier jour des règles suivantes. En
+                    moyenne, le cycle menstruel est de 28 jours, mais certaines femmes ont des cycles plus courts,
+                    jusqu’à 22 jours, tandis que d’autres ont des cycles beaucoup plus longs, pouvant durer jusqu’à 35,
+                    voire 40 jours. <br>
 
                     Il existe plusieurs méthodes pour déterminer la date d'ovulation, notamment en surveillant la
                     température corporelle basale, en utilisant des tests d'ovulation ou en surveillant les changements
@@ -404,19 +511,26 @@
                     Plus
                 </h2>
 
+
                 <p class='text text-justify' v-if='results != null'>
-                    Votre bébé n'est plus prématuré à partir du: <span>{{ formatDate(prematureDate) }}</span> <br>
-                    Date limite pour effectuer le test de trisomie 21: entre le <span>{{ formatDate(dateTriso1) }}
+                    <strong>Votre bébé n'est plus prématuré à partir du:</strong>
+                    <span>{{ formatDate(prematureDate) }}</span>
+                    <br>
+                    <strong> Date limite pour effectuer le test de trisomie 21:</strong> entre le
+                    <span>{{ formatDate(dateTriso1) }}
                     </span>
                     et le
                     <span>{{ formatDate(dateTriso2) }}</span> <br>
-                    La consultation avec l'anesthésiste est à effectuer à partir du
+                    <strong>Consultation avec l'anesthésiste:</strong>
+                    à partir du
                     <span>{{ formatDate(anesthDate) }}</span> <br>
-                    Le prélèvement vaginal est à éffectuer entre le <span>{{ formatDate(dateVagA) }}</span> et le
+                    <strong>Prélèvement vaginal</strong>: à éffectuer entre le
+                    <span>{{ formatDate(dateVagA) }}</span> et
+                    le
                     <span>{{ formatDate(dateVagB) }}</span> <br>
                 </p>
 
-                <p class="text text-justify">
+                <p class='text text-justify'>
                 <ul>
                     <li>
                         <strong>Le test de trisomie21</strong> est réalisé en début de grossesse entre la 11ème et la
@@ -426,12 +540,25 @@
                         de
                         trisomie 18 et un éventuel défaut de fermeture du tube neural.
                     </li>
+
+                    <li>
+                        C'est au cours du 8e mois que votre <strong>rendez-vous avec l'anesthésiste</strong> est
+                        préconisé. En cas de
+                        grossesse difficile ou de naissance multiple, le rendez-vous est avancé au 6e ou 7e mois.
+                        Parfois, vous pouvez y aller au tout début du 9e mois.
+                    </li>
+
+                    <li>
+                        En général, votre professionnel de la santé procédera à un <strong>examen vaginal</strong>
+                        seulement au cours des visites près de votre date prévue d'accouchement.
+                    </li>
                 </ul>
 
                 </p>
             </div>
             <hr>
         </div>
+
 
     </div>
     <?php include 'parts/footer.php'; ?>

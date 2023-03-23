@@ -62,18 +62,18 @@ html, body{
         h1{
             margin: 15px auto;
             font-family: 'Verdana', sans-serif;
+            color: $blue;
 
             span{
                 margin-left: 10px;
 
                 a{
                     cursor: pointer;
-                    color: $blue;
-                    font-weight: bold;
                     i{
                         color: $blue;
-                        font-size: 1em;
+                        font-size: 0.5em;
                         font-weight: bold;
+
                     }
                 }
 
@@ -81,6 +81,10 @@ html, body{
                     font-size: larger;
                 }
             }
+        }
+
+        strong{
+            font-weight: bold;
         }
 
         span{
@@ -108,6 +112,16 @@ html, body{
                     top: 50px;
                     right: 10px;
             }
+
+            .btn:hover{
+                background-color: $blue;
+                color: $pink;
+            }
+        }
+
+        h2{
+            color: $blue;
+            text-decoration: underline;
         }
 
         .results{
@@ -142,7 +156,71 @@ html, body{
     .text{
         span{
             color: $blue;
+
         }
+    }
+
+    .calendar{
+        width: 95%;
+        height: 83vh;
+        top: 20px;
+        border-radius: 5px;
+        margin:  auto;
+        background-color: rgb(128, 128, 187);
+        background-position: left;
+        background-repeat: no-repeat;
+        background-size: auto;
+        overflow: hidden;
+        overflow-y: scroll;
+
+        .close{
+            float: right;
+            cursor: pointer;
+
+            i{
+                color: $pink;
+            }
+        }
+
+        .close:hover{
+            font-size: larger;
+        }
+
+        h3{
+            font-size: 1.3em;
+        }
+
+        .weeks{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: auto;
+            flex-wrap: wrap;
+
+            .week{
+                margin: 10px;
+                height: auto;
+                border-radius: 5px;
+                border: 1px rgb(93, 93, 172) solid;
+                flex: 1;
+
+                h4{
+                    font-size: 1.1em;
+                    font-weight: bold;
+                }
+              }
+
+              .box{
+                border: $pink 5px solid;
+                color: $blue;
+              }
+        }
+
+            .week{
+
+            }
+
     }
 }
 

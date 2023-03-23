@@ -13,11 +13,12 @@ createApp({
       results: null,
       lastPeriodDate: '',
       conceptionDate: '',
+      durationInMs: '',
       durationInDays: '',
       durationInWeeks: '',
       durationInMonths: '',
-      durationInMonthsFormated: '',
       dueDate: '',
+      dueDateFormated: '',
       AndurationInDays: '',
       AndurationInDays: '',
       Anduration: '',
@@ -53,153 +54,110 @@ createApp({
       prematureDate: '',
       anesthDate: '',
       dateVagA: '',
-      dateVagB: ''
+      dateVagB: '',
+      fecondDateA: '',
+      fecondDateB: '',
+      showCalendar: false
     }
   },
   computed: {
-    getDueDate() {
-      return new Date(
-        this.lastPeriodDate
-          ? new Date(this.lastPeriodDate).getTime() + 289 * 24 * 60 * 60 * 1000
-          : new Date(this.conceptionDate).getTime() + 267 * 24 * 60 * 60 * 1000
-      );
-    },
-    dueDateFormat() {
-     // return this.dueDate.toLocaleDateString();
-     return this.dueDate;
-    }
+
   },
   methods: {
     proceed() {
       if (this.lastPeriodDate === '' && this.conceptionDate === '') {
         alert('Veuillez renseigner soit la date des dernières règles soit celle de la conception');
       } else {
+
+        if (this.conceptionDate === '') {
+          const startDate = new Date(this.lastPeriodDate);
+          startDate.setDate(startDate.getDate() + 14);
+        this.conceptionDate = startDate;
+        }
+
         const today = new Date();
-        const startDate = this.lastPeriodDate  ? new Date(this.lastPeriodDate) : new Date(this.conceptionDate);
-        const durationInMs = today - startDate;
-        this.durationInDays = Math.floor((durationInMs / 1000 / 60 / 60 / 24));
+
+        this.durationInMs = today - this.conceptionDate;
+
+        if(this.durationInMs < 0){
+         alert("Merci de vérifier la date insérée");
+         exit();
+        }
+
+       this.durationInDays = Math.floor((this.durationInMs / 1000 / 60 / 60 / 24));
 
         if(this.durationInDays > 300){
           alert("Merci de vérifier la date insérée")
         } else{
           this.results = 'ok';
-          if (this.conceptionDate === '') {
-            const startDate = new Date(this.lastPeriodDate);
-            startDate.setDate(startDate.getDate() + 14);
-          this.conceptionDate = startDate.toLocaleDateString('fr-FR');
-
-          }
 
           this.durationInWeeks = Math.floor(this.durationInDays / 7);
           this.durationInMonths = Math.floor(this.durationInDays / 30);
           this.durationInMonthsFormated = this.durationInMonths + 1;
 
-          this.dueDate = this.getDueDate.toLocaleDateString('fr-FR');
-
-          this.AndurationInDays = Math.floor(durationInMs / 1000 / 60 / 60 / 24);
-          this.AndurationInWeeks = Math.floor(this.AndurationInDays / 7);
-          if (this.AndurationInDays % 7 === 0) {
-            this.Anduration = this.AndurationInWeeks + ' semaines';
-          } else if (this.AndurationInWeeks === 0) {
-            this.Anduration = this.AndurationInDays + ' jour' + (this.AndurationInDays > 1 ? 's' : '');
-          } else {
-            this.Anduration = this.AndurationInWeeks + ' semaines ' + (this.AndurationInDays % 7) + ' jour' + ((this.AndurationInDays % 7) > 1 ? 's' : '');
+          function addDays(date, days) {
+            var result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
           }
+          this.dueDate = addDays(this.conceptionDate, 266);
 
-          this.dateOfAnnounement =  new Date(
-           ( this.lastPeriodDate
-            ? new Date(this.lastPeriodDate).getTime() + 104 * 24 * 60 * 60 * 1000
-            : new Date(this.conceptionDate).getTime() + 89 * 24 * 60 * 60 * 1000)
-          ).toLocaleDateString('fr-FR');;
+          this.AndurationInDays = this.durationInDays + 14;
 
-          //trisomie 21
-            const startDate = new Date(this.lastPeriodDate);
-            startDate.setDate(startDate.getDate() + 78);
-          this.dateTriso1 = startDate.toLocaleDateString('fr-FR');
+          this.dateOfAnnounement = addDays(this.conceptionDate, 90);
 
-          startDate.setDate(startDate.getDate() + 20);
-        this.dateTriso2 = startDate.toLocaleDateString('fr-FR');
+          this.dateTriso1 = addDays(this.conceptionDate, 64 )
 
+          this.dateTriso2 = addDays(this.conceptionDate, 49 )
 
-        //echographies
-        let nextPeriodStartDate = new Date(this.lastPeriodDate);
-        nextPeriodStartDate.setDate(nextPeriodStartDate.getDate() + 36);
-        this.dateEco0A = nextPeriodStartDate.toLocaleDateString('fr-FR');
+          this.dateEco0A = addDays(this.conceptionDate, 21 )
 
-        nextPeriodStartDate.setDate(nextPeriodStartDate.getDate() + 27);
-        this.dateEco0B = nextPeriodStartDate.toLocaleDateString('fr-FR');
+          this.dateEco0B = addDays(this.conceptionDate, 53 )
 
-        nextPeriodStartDate.setDate(nextPeriodStartDate.getDate() + 8);
-        this.dateEco1A = nextPeriodStartDate.toLocaleDateString('fr-FR');
+          this.dateEco1A = addDays(this.conceptionDate, 60 )
 
-        nextPeriodStartDate.setDate(nextPeriodStartDate.getDate() + 27);
-        this.dateEco1B = nextPeriodStartDate.toLocaleDateString('fr-FR');
+          this.dateEco1B = addDays(this.conceptionDate, 71 )
 
-        nextPeriodStartDate.setDate(nextPeriodStartDate.getDate() + 36);
-        this.dateEco2A = nextPeriodStartDate.toLocaleDateString('fr-FR');
+          this.dateEco2A = addDays(this.conceptionDate, 120)
 
-        nextPeriodStartDate.setDate(nextPeriodStartDate.getDate() + 45);
-        this.dateEco2B = nextPeriodStartDate.toLocaleDateString('fr-FR');
+          this.dateEco2B = addDays(this.conceptionDate, 171)
 
-        nextPeriodStartDate.setDate(nextPeriodStartDate.getDate() + 25);
-        this.dateEco3A = nextPeriodStartDate.toLocaleDateString('fr-FR');
+          this.dateEco3A = addDays(this.conceptionDate, 211 )
 
-        nextPeriodStartDate.setDate(nextPeriodStartDate.getDate() + 41);
-        this.dateEco3B = nextPeriodStartDate.toLocaleDateString('fr-FR');
-
-        //consultations
-        let nextAppStartDate = new Date(this.lastPeriodDate);
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 106);
-        this.dateCons4A = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 30);
-        this.dateCons4B = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 2);
-        this.dateCons5A = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 30);
-        this.dateCons5B = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 1);
-        this.dateCons6A = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 30);
-        this.dateCons6B = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 1);
-        this.dateCons7A = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 30);
-        this.dateCons7B = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 1);
-        this.dateCons8A = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 30);
-        this.dateCons8B = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 1);
-        this.dateCons9A = nextAppStartDate.toLocaleDateString('fr-FR');
-
-        nextAppStartDate.setDate(nextAppStartDate.getDate() + 30);
-        this.dateCons9B = nextAppStartDate.toLocaleDateString('fr-FR');
+          this.dateEco3B = addDays(this.conceptionDate, 288)
 
 
-        //more
-        let nextPrematureStartDate = new Date(this.lastPeriodDate);
-        nextPrematureStartDate.setDate(nextAppStartDate.getDate() + 234);
-        this.prematureDate = nextPrematureStartDate.toLocaleDateString('fr-FR');
+        this.dateCons4A  = addDays(this.conceptionDate, 90)
 
-        nextPrematureStartDate.setDate(nextPrematureStartDate.getDate() + 4);
-        this.anesthDate = nextPrematureStartDate.toLocaleDateString('fr-FR');
+        this.dateCons4B  = addDays(this.conceptionDate, 120)
 
-        nextPrematureStartDate.setDate(nextPrematureStartDate.getDate() -18);
-        this.dateVagA = nextPrematureStartDate.toLocaleDateString('fr-FR');
+        this.dateCons5A  = addDays(this.conceptionDate, 121)
 
-        nextPrematureStartDate.setDate(nextPrematureStartDate.getDate() +27);
-        this.dateVagB = nextPrematureStartDate.toLocaleDateString('fr-FR');
+        this.dateCons5B  = addDays(this.conceptionDate, 151)
 
+        this.dateCons6A  = addDays(this.conceptionDate, 152)
+
+        this.dateCons6B  = addDays(this.conceptionDate, 182)
+
+        this.dateCons7A  = addDays(this.conceptionDate, 183)
+
+        this.dateCons7B  = addDays(this.conceptionDate, 213)
+
+        this.dateCons8A  = addDays(this.conceptionDate, 214)
+
+        this.dateCons8B  = addDays(this.conceptionDate, 244)
+
+        this.dateCons9A  = addDays(this.conceptionDate, 245)
+
+        this.dateCons9B  = addDays(this.conceptionDate, 275)
+
+        this.prematureDate = addDays(this.conceptionDate, 34 *7);
+
+        this.anesthDate = addDays(this.conceptionDate, 243); //1
+
+        this.dateVagA = addDays(this.conceptionDate, 225);
+
+        this.dateVagB =  addDays(this.conceptionDate, 253);
 
 
           this.showResults = true;
@@ -260,25 +218,41 @@ createApp({
 
         }
       },
+       formatDate(date) {
+        const formattedDate = date.toLocaleDateString('fr-FR');
+        return formattedDate;
+      },
+      convertir(jours) {
+        const joursParMois = 30.44;
+        const joursParSemaine = 7;
 
-    convertir(jours) {
-      const joursParMois = 30.44;
-      const joursParSemaine = 7;
+        const mois = Math.floor(jours / joursParMois);
+        const resteMois = jours % joursParMois;
 
-      const mois = Math.floor(jours / joursParMois);
-      const resteMois = jours % joursParMois;
+        const semaines = Math.floor(resteMois / joursParSemaine);
+        const resteSemaines = resteMois % joursParSemaine;
 
-      const semaines = Math.floor(resteMois / joursParSemaine);
-      const resteSemaines = resteMois % joursParSemaine;
+        const joursRestants = Math.floor(resteSemaines);
 
-      const joursRestants = Math.floor(resteSemaines);
+        // Ajouter "s" si nécessaire
+        const moisPluriel = mois > 1 ? "mois" : "mois";
+        const semainesPluriel = semaines > 1 ? "semaines" : "semaine";
+        const joursPluriel = joursRestants > 1 ? "jours" : "jour";
 
-      return `${mois} mois, ${semaines} semaine(s) et ${joursRestants} jour(s)`;
-    },
-    format(num) {
-      let res = new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 2 }).format(num);
-      return res;
-    },
+        return `${mois} ${moisPluriel}, ${semaines} ${semainesPluriel} et ${joursRestants} ${joursPluriel}`;
+      },
+
+       formatDate(date) {
+        const options = {
+          weekday: 'short',
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        };
+        const locale = 'fr-FR';
+        const formattedDate = date.toLocaleString(locale, options);
+        return formattedDate;
+      },
 
     displayEchography() {
       this.showResults = false;
@@ -325,8 +299,14 @@ createApp({
       this.showVacancies= false;
       this.showOvulation= true
      },
+     displayCalendar(){
+        this.showCalendar = true;
+     },
+     closeCalendar(){
+      this.showCalendar = false;
+     },
     format(num){
-    let res = new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 3 }).format(num);
+    let res = new Intl.NumberFormat('fr-FR', { maximumSignificantDigits: 1 }).format(num);
     return res;
 },
     getImgUrl(pic) {
